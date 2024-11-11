@@ -1,6 +1,7 @@
 package com.caiquekola.todosimple.services;
 
 import com.caiquekola.todosimple.models.User;
+import com.caiquekola.todosimple.models.enums.ProfileEnum;
 import com.caiquekola.todosimple.repositories.TaskRepository;
 import com.caiquekola.todosimple.repositories.UserRepository;
 import com.caiquekola.todosimple.services.exceptions.DataBindindViolationException;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -37,6 +40,7 @@ public class UserService {
         user.setId(null);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user = this.userRepository.save(user);
+        user.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet()));
         this.taskRepository.saveAll(user.getTasks());
         return user;
     }
