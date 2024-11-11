@@ -6,6 +6,7 @@ import com.caiquekola.todosimple.repositories.UserRepository;
 import com.caiquekola.todosimple.services.exceptions.DataBindindViolationException;
 import com.caiquekola.todosimple.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,10 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -30,6 +35,7 @@ public class UserService {
     @Transactional
     public User create(User user) {
         user.setId(null);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user = this.userRepository.save(user);
         this.taskRepository.saveAll(user.getTasks());
         return user;
@@ -39,7 +45,7 @@ public class UserService {
     public User update(User user) {
         //Reutilizando o código do findById
         User newUser = this.findById(user.getId());
-        newUser.setPassword(user.getPassword());
+        newUser.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));
         return this.userRepository.save(newUser);
     }
 
