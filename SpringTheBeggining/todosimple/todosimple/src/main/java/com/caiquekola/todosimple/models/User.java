@@ -48,10 +48,10 @@ public class User {
     //Senha só poder escrita, nunca é lida e retornada ao usuário
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password",
-            nullable = false,length = 50)
+            nullable = false,length = 100)
     @NotNull(groups = {CreateUser.class,UpdateUser.class})
     @NotEmpty(groups = CreateUser.class)
-    @Size(groups = CreateUser.class,min = 5, max = 50)
+    @Size(groups = CreateUser.class,min = 5, max = 100)
     private String password;
 
     @OneToMany(mappedBy = "user")
