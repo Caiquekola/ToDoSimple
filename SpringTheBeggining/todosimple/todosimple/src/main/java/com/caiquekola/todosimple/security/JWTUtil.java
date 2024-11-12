@@ -21,9 +21,9 @@ public class JWTUtil {
 
     public String generateToken(String username) {
         SecretKey key = getKeyBySecret();
-        return (Jwts.builder()
+        return String.valueOf((Jwts.builder()
                 .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expiration))));
+                .setExpiration(new Date(System.currentTimeMillis() + (expiration)))));
     }
 
     private SecretKey getKeyBySecret( ) {
